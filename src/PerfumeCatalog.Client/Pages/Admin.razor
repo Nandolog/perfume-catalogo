@@ -1,0 +1,48 @@
+@page "/admin"
+@using PerfumeCatalog.Client.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Administracion</PageTitle>
+
+<div class="admin-container">
+    <h1>Panel de Administración</h1>
+@if(verificando)
+    {
+        <p>Verificando sesión...</p>
+    }
+    else if (!autenticado)
+    {
+        <p>No estás autenticado.</p>
+        <button class="btn-primario" @onclick="IrALogin">Ir al login</button>
+    }
+    else
+    {
+        <p>Hola, <strong>@email</strong>Bienvenido al Panel</p>
+        <p>gestionar y editar catalogo</p>
+
+        <button class="btn-pdf-small" @onclick="CerrarSesion">Cerrar sesión</button>
+       
+    }
+</div>
+
+@code {
+    private bool autenticado = false;
+    private bool verificando = true;
+    private string? email;
+
+    protected override async Task OnInitializedAsync()
+    {
+        autenticado = await Auth.EstaAutenticadoAsync();
+        email = Auth.EmailActual();
+        verificando = false;
+    }
+
+    private void IrALogin() => Nav.NavigateTo("/login");
+    
+    private async Task CerrarSesion()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/login");
+    }
+}
