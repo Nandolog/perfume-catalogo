@@ -178,3 +178,65 @@ code {
     color: #16a34a;
     font-size:1.1 rem;
 }
+
+.header-catalogo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.btn-whatsapp,
+.btn-pdf,
+.btn-pdf-small{
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.15s, background 0.2s;
+}
+
+.btn-whatsapp:hover,
+.btn-pdf:hover,
+.btn-pdf-small:hover{
+    transform: translateY(-2px);
+
+}
+
+.btn-whatsapp {
+    background-color: #25D366;
+    color: white;
+    padding: 0.6rem 1rem;
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.btn-pdf {
+    background-color: #7c3aed;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.btn-pdf-small {
+    background-color: #7c3aed;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.acciones {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.error-box {
+    background-color:#fee;
+    padding:1rem;
+    border-left: 4px solid #c00;
+    border-radius: 6px;
+}
