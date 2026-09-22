@@ -66,4 +66,22 @@ window.generarPDFCatalogo = (productos) => {
     });
 
     doc.save('catalogo-perfumes.pdf');
+
+    window.leerArchivoComoByte = async (input) => {
+    const input = document.getElementById('archivoInput');
+    if (!input || !input.files || input.files.length === 0) {
+        return null;
+    }
+    const file = input.files[0];
+    const buffer = await file.arrayBuffer();
+    return {
+        byte : Array.from(new Uint8Array(buffer)),
+        nombre: file.name,
+    };
+};
+
+window.limparInputArchivo = (inputId) => {
+    const input = document.getElementById(inputId);
+    if (input) input.value = '';
+};
 };

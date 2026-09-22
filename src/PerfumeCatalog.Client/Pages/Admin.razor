@@ -1,48 +1,281 @@
 @page "/admin"
+@using PerfumeCatalog.Client.Models
 @using PerfumeCatalog.Client.Services
 @inject AuthService Auth
+@inject ProductoService ProductoService
 @inject NavigationManager Nav
+@inject IJSRuntime JS
 
-<PageTitle>Administracion</PageTitle>
+<PageTitle>Administración</PageTitle>
 
-<div class="admin-container">
-    <h1>Panel de Administración</h1>
-@if(verificando)
-    {
-        <p>Verificando sesión...</p>
-    }
-    else if (!autenticado)
-    {
+<div class="admin-page">
+
+@if (verificando)
+{
+    <p>Verificando sesión...</p>
+}
+else if (!autenticado)
+{
+    <div class="admin-container">
         <p>No estás autenticado.</p>
         <button class="btn-primario" @onclick="IrALogin">Ir al login</button>
-    }
-    else
-    {
-        <p>Hola, <strong>@email</strong>Bienvenido al Panel</p>
-        <p>gestionar y editar catalogo</p>
+    </div>
+}
+else
+{
+    <div class="admin-header">
+        <h1>⚙️ Panel de administración</h1>
+        <div class="admin-user">
+            <span>@email</span>
+            <button class="btn-pdf-small" @onclick="CerrarSesion">🚪 Salir</button>
+        </div>
+    </div>
 
-        <button class="btn-pdf-small" @onclick="CerrarSesion">Cerrar sesión</button>
-       
-    }
+    <div class="admin-form">
+        <h2>@(editando is null ? "➕ Nuevo producto" : $"✏️ Editando: {editando.Nombre}")</h2>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="mensaje-box">@mensaje</div>
+        }
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input @bind="form.Nombre" placeholder="Ej: Sauvage Elixir" />
+            </div>
+            <div class="form-group">
+                <label>Categoría</label>
+                <input @bind="form.Categoria" placeholder="Masculino / Femenino / Unisex" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Descripción</label>
+            <textarea @bind="form.Descripcion" rows="3"
+                      placeholder="Notas, tamaño, detalles..."></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Precio (Gs.)</label>
+                <input type="number" @bind="form.Precio" placeholder="450000" />
+            </div>
+            <div class="form-group">
+                <label>Disponible</label>
+                <input type="checkbox" @bind="form.Disponible" style="width:auto; margin-top:0.5rem;" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Imagen</label>
+            <input type="file" id="inputImagen" accept="image/*" />
+            @if (!string.IsNullOrEmpty(form.ImagenUrl))
+            {
+                <div class="preview-imagen">
+                    <img src="@form.ImagenUrl" alt="Preview" />
+                    <button class="btn-pdf-small" @onclick="QuitarImagen">Quitar imagen</button>
+                </div>
+            }
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-primario" @onclick="Guardar" disabled="@guardando">
+                @(guardando ? "Guardando..." : (editando is null ? "Crear producto" : "Guardar cambios"))
+            </button>
+            @if (editando is not null)
+            {
+                <button class="btn-cancelar" @onclick="CancelarEdicion">Cancelar</button>
+            }
+        </div>
+    </div>
+
+    <div class="admin-lista">
+        <h2>📦 Productos (@productos.Count)</h2>
+
+        @if (productos.Count == 0)
+        {
+            <p>No hay productos todavía.</p>
+        }
+        else
+        {
+            <table class="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Disp.</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in productos)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(p.ImagenUrl))
+                                {
+                                    <img src="@p.ImagenUrl" alt="@p.Nombre" class="miniatura" />
+                                }
+                            </td>
+                            <td>@p.Nombre</td>
+                            <td>@p.Categoria</td>
+                            <td>Gs. @p.Precio.ToString("N0")</td>
+                            <td>@(p.Disponible ? "✅" : "❌")</td>
+                            <td class="acciones-tabla">
+                                <button class="btn-editar" @onclick="() => Editar(p)">✏️</button>
+                                <button class="btn-borrar" @onclick="() => Borrar(p)">🗑️</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+
 </div>
 
 @code {
-    private bool autenticado = false;
     private bool verificando = true;
+    private bool autenticado;
     private string? email;
+
+    private List<Producto> productos = new();
+    private Producto form = new();
+    private Producto? editando;
+    private bool guardando;
+    private string? mensaje;
 
     protected override async Task OnInitializedAsync()
     {
         autenticado = await Auth.EstaAutenticadoAsync();
         email = Auth.EmailActual();
+
+        if (autenticado)
+        {
+            await CargarProductos();
+        }
+
         verificando = false;
     }
 
     private void IrALogin() => Nav.NavigateTo("/login");
-    
+
     private async Task CerrarSesion()
     {
         await Auth.LogoutAsync();
-        Nav.NavigateTo("/login");
+        Nav.NavigateTo("/");
+    }
+
+    private async Task CargarProductos()
+    {
+        try
+        {
+            productos = await ProductoService.ObtenerTodosAsync();
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"Error al cargar: {ex.Message}";
+        }
+    }
+
+    private void Editar(Producto p)
+    {
+        editando = p;
+        form = new Producto
+        {
+            Id = p.Id,
+            Nombre = p.Nombre,
+            Descripcion = p.Descripcion,
+            Precio = p.Precio,
+            ImagenUrl = p.ImagenUrl,
+            Categoria = p.Categoria,
+            Disponible = p.Disponible
+        };
+        mensaje = null;
+    }
+
+    private void CancelarEdicion()
+    {
+        editando = null;
+        form = new Producto();
+        mensaje = null;
+        _ = JS.InvokeVoidAsync("limpiarInputArchivo", "inputImagen");
+    }
+
+    private async Task QuitarImagen()
+    {
+        form.ImagenUrl = null;
+        await JS.InvokeVoidAsync("limpiarInputArchivo", "inputImagen");
+    }
+
+    private async Task Guardar()
+    {
+        if (string.IsNullOrWhiteSpace(form.Nombre))
+        {
+            mensaje = "El nombre es obligatorio.";
+            return;
+        }
+
+        guardando = true;
+        mensaje = null;
+
+        try
+        {
+            var resultado = await JS.InvokeAsync<ArchivoJs?>("leerArchivoComoBytes", "inputImagen");
+            if (resultado is not null && resultado.Bytes.Length > 0)
+            {
+                var bytes = resultado.Bytes.Select(b => (byte)b).ToArray();
+                form.ImagenUrl = await ProductoService.SubirImagenAsync(bytes, resultado.Nombre);
+            }
+
+            if (editando is null)
+            {
+                await ProductoService.CrearAsync(form);
+                mensaje = "✅ Producto creado.";
+            }
+            else
+            {
+                await ProductoService.ActualizarAsync(form);
+                mensaje = "✅ Producto actualizado.";
+            }
+
+            form = new Producto();
+            editando = null;
+            await JS.InvokeVoidAsync("limpiarInputArchivo", "inputImagen");
+            await CargarProductos();
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"❌ Error: {ex.Message}";
+            Console.WriteLine(ex);
+        }
+        finally
+        {
+            guardando = false;
+        }
+    }
+
+    private async Task Borrar(Producto p)
+    {
+        try
+        {
+            await ProductoService.BorrarAsync(p.Id);
+            mensaje = "🗑️ Producto eliminado.";
+            await CargarProductos();
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"❌ Error al borrar: {ex.Message}";
+        }
+    }
+
+    private class ArchivoJs
+    {
+        public int[] Bytes { get; set; } = Array.Empty<int>();
+        public string Nombre { get; set; } = "";
     }
 }
