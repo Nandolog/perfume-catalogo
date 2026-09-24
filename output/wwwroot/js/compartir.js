@@ -34,40 +34,56 @@
         doc.save(`${producto.nombre}.pdf`);
     };
 
-    window.generarPDFCatalogo = function (productos) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-
-        doc.setFontSize(24);
-        doc.text('Catalogo de Perfumes', 105, 20, { align: 'center' });
-
-        let y = 40;
-        doc.setFontSize(12);
-
-        productos.forEach((p, i) => {
-            if (y > 260) {
-                doc.addPage();
-                y = 20;
+   window.generarPDFCatalogo = function (data) {
+    let productos = data;
+    if (!Array.isArray(productos) && data && typeof data === 'object') {
+        const keys = Object.keys(data);
+        for (const k of keys) {
+            if (Array.isArray(data[k])) {
+                productos = data[k];
+                break;
             }
+        }
+    }
 
-            doc.setFontSize(14);
-            doc.setTextColor(0);
-            doc.text(`${i + 1}. ${p.nombre}`, 20, y);
-            y += 7;
+    if (!Array.isArray(productos)) {
+        console.error('generarPDFCatalogo: no se recibió un array', data);
+        alert('Error generando PDF: datos inválidos');
+        return;
+    }
 
-            doc.setFontSize(10);
-            doc.setTextColor(100);
-            doc.text(`${p.categoria} - Gs. ${p.precio.toLocaleString('es-PY')}`, 25, y);
-            y += 6;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
 
-            doc.setTextColor(80);
-            const desc = doc.splitTextToSize(p.descripcion, 165);
-            doc.text(desc, 25, y);
-            y += desc.length * 5 + 6;
-        });
+    doc.setFontSize(24);
+    doc.text('Catalogo de Perfumes', 105, 20, { align: 'center' });
 
-        doc.save('catalogo-perfumes.pdf');
-    };
+    let y = 40;
+
+    productos.forEach((p, i) => {
+        if (y > 260) {
+            doc.addPage();
+            y = 20;
+        }
+
+        doc.setFontSize(14);
+        doc.setTextColor(0);
+        doc.text(`${i + 1}. ${p.nombre}`, 20, y);
+        y += 7;
+
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`${p.categoria || ''} - Gs. ${Number(p.precio).toLocaleString('es-PY')}`, 25, y);
+        y += 6;
+
+        doc.setTextColor(80);
+        const desc = doc.splitTextToSize(p.descripcion || '', 165);
+        doc.text(desc, 25, y);
+        y += desc.length * 5 + 6;
+    });
+
+    doc.save('catalogo-perfumes.pdf');
+};
 
     window.leerArchivoComoBytes = async function (inputId) {
         const inputEl = document.getElementById(inputId);
