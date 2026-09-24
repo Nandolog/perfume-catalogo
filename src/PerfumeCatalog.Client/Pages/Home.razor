@@ -109,16 +109,17 @@ else
         await JS.InvokeVoidAsync("generarPDFProducto", datos);
     }
 
-    private async Task DescargarCatalogoPDF()
+   private async Task DescargarCatalogoPDF()
+{
+    var lista = productos.Select(p => new
     {
-        var lista = productos.Select(p => new
-        {
-            nombre = p.Nombre,
-            descripcion = p.Descripcion,
-            precio = p.Precio,
-            categoria = p.Categoria
-        }).ToArray();
+        nombre = p.Nombre ?? "",
+        descripcion = p.Descripcion ?? "",
+        precio = (double)p.Precio,
+        categoria = p.Categoria ?? ""
+    }).ToArray();
 
-        await JS.InvokeVoidAsync("generarPDFCatalogo", lista);
-    }
+    Console.WriteLine($"[PDF] Enviando {lista.Length} productos a JS");
+    await JS.InvokeVoidAsync("generarPDFCatalogo", (object)lista);
+}
 }

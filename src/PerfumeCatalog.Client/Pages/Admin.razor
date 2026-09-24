@@ -150,17 +150,15 @@ else
     private string? mensaje;
 
     protected override async Task OnInitializedAsync()
+{
+    autenticado = await Auth.EstaAutenticadoAsync();
+    if (autenticado)
     {
-        autenticado = await Auth.EstaAutenticadoAsync();
-        email = Auth.EmailActual();
-
-        if (autenticado)
-        {
-            await CargarProductos();
-        }
-
-        verificando = false;
+        email = await Auth.EmailActualAsync();
+        await CargarProductos();
     }
+    verificando = false;
+}
 
     private void IrALogin() => Nav.NavigateTo("/login");
 
