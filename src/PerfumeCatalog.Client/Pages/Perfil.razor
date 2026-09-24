@@ -1,0 +1,123 @@
+@page "/perfil"
+@using PerfumeCatalog.Client.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+
+<PageTitle>Mi perfil</PageTitle>
+
+<div class="admin-container">
+    <h1>👤 Mi perfil</h1>
+
+    @if (verificando)
+    {
+        <p>Cargando...</p>
+    }
+    else if (!autenticado)
+    {
+        <p>No estás autenticado.</p>
+        <button class="btn-primario" @onclick="IrALogin">Ir al login</button>
+    }
+    else
+    {
+        <p>Email: <strong>@email</strong></p>
+
+        <hr />
+
+        <h2>Cambiar contraseña</h2>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="mensaje-box" style="background:@(esError ? "#fee" : "#f0fdf4"); color:@(esError ? "#991b1b" : "#166534"); border-left-color:@(esError ? "#dc2626" : "#16a34a");">
+                @mensaje
+            </div>
+        }
+
+        <div class="form-group">
+            <label>Nueva contraseña</label>
+            <input type="password" @bind="nuevaPassword" placeholder="Mínimo 6 caracteres" />
+        </div>
+
+        <div class="form-group">
+            <label>Confirmar nueva contraseña</label>
+            <input type="password" @bind="confirmarPassword" placeholder="Repetí la contraseña" />
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-primario" @onclick="CambiarPassword" disabled="@guardando">
+                @(guardando ? "Cambiando..." : "Cambiar contraseña")
+            </button>
+            <button class="btn-cancelar" @onclick="VolverAlAdmin">Volver al panel</button>
+        </div>
+    }
+</div>
+
+@code {
+    private bool verificando = true;
+    private bool autenticado;
+    private string? email;
+
+    private string nuevaPassword = "";
+    private string confirmarPassword = "";
+    private bool guardando;
+    private string? mensaje;
+    private bool esError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        autenticado = await Auth.EstaAutenticadoAsync();
+        if (autenticado)
+        {
+            email = await Auth.EmailActualAsync();
+        }
+        verificando = false;
+    }
+
+    private void IrALogin() => Nav.NavigateTo("/login");
+    private void VolverAlAdmin() => Nav.NavigateTo("/admin");
+
+    private async Task CambiarPassword()
+    {
+        mensaje = null;
+        esError = false;
+
+        if (string.IsNullOrWhiteSpace(nuevaPassword))
+        {
+            mensaje = "La contraseña no puede estar vacía.";
+            esError = true;
+            return;
+        }
+
+        if (nuevaPassword.Length < 6)
+        {
+            mensaje = "La contraseña debe tener al menos 6 caracteres.";
+            esError = true;
+            return;
+        }
+
+        if (nuevaPassword != confirmarPassword)
+        {
+            mensaje = "Las contraseñas no coinciden.";
+            esError = true;
+            return;
+        }
+
+        guardando = true;
+
+        try
+        {
+            await Auth.CambiarPasswordAsync(nuevaPassword);
+            mensaje = "✅ Contraseña cambiada exitosamente.";
+            nuevaPassword = "";
+            confirmarPassword = "";
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"❌ Error: {ex.Message}";
+            esError = true;
+        }
+        finally
+        {
+            guardando = false;
+        }
+    }
+}

@@ -102,4 +102,17 @@
         const inputEl = document.getElementById(inputId);
         if (inputEl) inputEl.value = '';
     };
+
+        // Puente sincrónico con localStorage para persistir la sesión de Supabase
+    window.localStorageSync = {
+        get: function (key) {
+            return window.localStorage.getItem(key);
+        },
+        set: function (key, value) {
+            window.localStorage.setItem(key, value);
+        },
+        remove: function (key) {
+            window.localStorage.removeItem(key);
+        }
+    };
 })();

@@ -34,4 +34,13 @@ public class AuthService
         var client = await _provider.GetClientAsync();
         return client.Auth.CurrentUser?.Email;
     }
+
+    public async Task CambiarPasswordAsync(string nuevaPassword)
+{
+    var client = await _provider.GetClientAsync();
+    await client.Auth.Update(new Supabase.Gotrue.UserAttributes
+    {
+        Password = nuevaPassword
+    });
+}
 }
