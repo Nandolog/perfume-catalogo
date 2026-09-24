@@ -68,8 +68,12 @@
         if (autenticado)
         {
             email = await Auth.EmailActualAsync();
+            verificando = false;
         }
-        verificando = false;
+        else
+     {
+        Nav.NavigateTo("/login");
+     }
     }
 
     private void IrALogin() => Nav.NavigateTo("/login");

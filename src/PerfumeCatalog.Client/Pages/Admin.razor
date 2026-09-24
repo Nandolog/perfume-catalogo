@@ -17,8 +17,7 @@
 else if (!autenticado)
 {
     <div class="admin-container">
-        <p>No estás autenticado.</p>
-        <button class="btn-primario" @onclick="IrALogin">Ir al login</button>
+        <p>Redirigiendo al login...</p>
     </div>
 }
 else
@@ -157,8 +156,13 @@ else
     {
         email = await Auth.EmailActualAsync();
         await CargarProductos();
+        verificando = false;
     }
-    verificando = false;
+    
+    else
+    {
+        Nav.NavigateTo("/login");
+    }
 }
 
     private void IrALogin() => Nav.NavigateTo("/login");

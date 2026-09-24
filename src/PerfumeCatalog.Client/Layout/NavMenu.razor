@@ -1,6 +1,11 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using PerfumeCatalog.Client.Services
+@inject AuthService Auth
+@inject NavigationManager Nav
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">PerfumeCatalogo</a>
+        <a class="navbar-brand" href="">🌸 Boutique Norma</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,30 +16,76 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio
             </NavLink>
         </div>
-   
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="login">
-                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Login
+            <NavLink class="nav-link" href="productos">
+                <span class="bi bi-grid-fill-nav-menu" aria-hidden="true"></span> Productos
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="admin">
-                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Admin
-            </NavLink>
-    </div>
- </nav>
+        @if (esAdmin)
+        {
+            <hr class="menu-separator" />
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="admin">
+                    <span class="bi bi-gear-fill-nav-menu" aria-hidden="true"></span> Panel admin
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="admin/categorias">
+                    <span class="bi bi-folder-fill-nav-menu" aria-hidden="true"></span> Categorías
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="perfil">
+                    <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Mi perfil
+                </NavLink>
+            </div>
+        }
+    </nav>
 </div>
+
 @code {
     private bool collapseNavMenu = true;
+    private bool esAdmin;
+    private bool yaVerificado;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await VerificarAuth();
+        Nav.LocationChanged += OnLocationChanged;
+    }
+
+    private async void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        await VerificarAuth();
+        StateHasChanged();
+    }
+
+    private async Task VerificarAuth()
+    {
+        try
+        {
+            esAdmin = await Auth.EstaAutenticadoAsync();
+        }
+        catch
+        {
+            esAdmin = false;
+        }
+        yaVerificado = true;
+    }
+
+    public void Dispose()
+    {
+        Nav.LocationChanged -= OnLocationChanged;
     }
 }
