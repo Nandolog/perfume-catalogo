@@ -26,4 +26,6 @@ public class Producto : BaseModel
 
     [Column("disponible")]
     public bool Disponible { get; set; } = true;
+    [Column("categoria_id")]
+    public int? CategoriaId { get; set; }
 }

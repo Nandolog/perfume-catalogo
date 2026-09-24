@@ -55,4 +55,6 @@ public class ProductoService
         await client.Storage.From("productos").Upload(bytes, nombreFinal);
         return client.Storage.From("productos").GetPublicUrl(nombreFinal);
     }
+
+    
 }

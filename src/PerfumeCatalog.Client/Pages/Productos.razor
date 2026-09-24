@@ -1,6 +1,7 @@
 @page "/productos"
 @using PerfumeCatalog.Client.Models
 @using PerfumeCatalog.Client.Services
+@using Microsoft.AspNetCore.Components
 @inject ProductoService ProductoService
 @inject IJSRuntime JS
 
@@ -135,4 +136,25 @@ else
         }).ToArray();
         await JS.InvokeVoidAsync("generarPDFCatalogo", (object)lista);
     }
+    [Parameter, SupplyParameterFromQuery(Name = "categoria")]
+public int? CategoriaFiltro { get; set; }
+
+protected override async Task OnParametersSetAsync()
+{
+    // Recargar si cambia el filtro
+    if (!cargando) return;
+    
+    var todos = await ProductoService.ObtenerProductosAsync();
+    
+    if (CategoriaFiltro.HasValue)
+    {
+        productos = todos.Where(p => p.CategoriaId == CategoriaFiltro.Value).ToList();
+    }
+    else
+    {
+        productos = todos;
+    }
+    
+    cargando = false;
+}
 }
