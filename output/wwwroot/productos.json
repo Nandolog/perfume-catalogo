@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "nombre": "Sauvage Elixir",
+        "descripcion": "Fragancia intensa con notas espciales y amaderadas. 100ml.",
+        "precio": 120000,
+        "imagenUrl": "https://picsum.photos/seed/perfume3/400",
+        "Categoria": "Masculino",
+        "disponible": true
+
+    },
+
+    {
+        "id": 2,
+        "nombre": "Chanel No. 5",
+        "descripcion": "Clásico perfume femenino con notas florales y aldehídicas. 100ml.",
+        "precio": 150000,
+        "imagenUrl": "https://picsum.photos/seed/perfume4/400",
+        "Categoria": "Femenino",
+        "disponible": true
+    },
+    
+    {
+        "id": 3,
+        "nombre": "Dior Sauvage",
+        "descripcion": "Fragancia fresca y especiada con notas de bergamota y pimienta. 100ml.",
+        "precio": 130000,
+        "imagenUrl":   "https://picsum.photos/seed/perfume5/400",
+        "Categoria": "Masculino",
+        "disponible": true
+    },
+
+    {
+        "id": 4,
+        "nombre": "Gucci Bloom",
+        "descripcion": "Perfume femenino con notas florales y un toque de almizcle. 100ml.",
+        "precio": 140000,
+        "imagenUrl": "https://picsum.photos/seed/perfume6/400",
+        "Categoria": "Femenino",
+        "disponible": true
+    },
+    
+    {
+        "id": 5,
+        "nombre": "Tom Ford Black Orchid",
+        "descripcion": "Fragancia unisex con notas de trufa, orquídea negra y vainilla. 100ml.",
+        "precio": 160000,
+        "imagenUrl": "https://picsum.photos/seed/perfume7/400",
+        "Categoria": "Unisex",
+        "disponible": true
+    }
+]
