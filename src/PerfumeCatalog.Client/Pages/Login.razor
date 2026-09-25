@@ -4,8 +4,8 @@
 @inject NavigationManager Nav
 
 <PageTitle>Iniciar sesion</PageTitle>
-
-<div class="login-container">
+<div class="login-page">
+    <div class="login-container">
     <h2>Iniciar sesion</h2>
 
     @if (!string.IsNullOrEmpty(error))
@@ -28,6 +28,8 @@
         @(cargando ? "Ingresando..." : "Entrar")
         </button>
         <p class = "hind">Solo para  administrador</p>
+</div>
+
 </div>
 
 @code {

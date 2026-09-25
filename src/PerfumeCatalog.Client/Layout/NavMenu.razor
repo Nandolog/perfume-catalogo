@@ -3,61 +3,49 @@
 @inject NavigationManager Nav
 @implements IDisposable
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">🌸 Boutique Norma</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+<header class="navbar-moderna">
+    <div class="container">
+        <a href="/" class="navbar-brand-moderna">
+            🌸 Boutique Norma
+        </a>
+
+        <button class="navbar-toggle" @onclick="ToggleMenu">
+            ☰
         </button>
+
+        <ul class="navbar-links @(menuAbierto ? "show" : "")">
+            <li>
+                <NavLink class="navbar-link" href="" Match="NavLinkMatch.All">Inicio</NavLink>
+            </li>
+            <li>
+                <NavLink class="navbar-link" href="productos">Productos</NavLink>
+            </li>
+            @if (esAdmin)
+            {
+                <li>
+                    <NavLink class="navbar-link" href="admin">Panel</NavLink>
+                </li>
+                <li>
+                    <NavLink class="navbar-link" href="admin/categorias">Categorías</NavLink>
+                </li>
+                <li>
+                    <NavLink class="navbar-link" href="perfil">Perfil</NavLink>
+                </li>
+            }
+        </ul>
+
+        <div class="navbar-actions">
+            @if (esAdmin)
+            {
+                <button class="btn-pdf-small" @onclick="CerrarSesion">Salir</button>
+            }
+        </div>
     </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="productos">
-                <span class="bi bi-grid-fill-nav-menu" aria-hidden="true"></span> Productos
-            </NavLink>
-        </div>
-
-        @if (esAdmin)
-        {
-            <hr class="menu-separator" />
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="admin">
-                    <span class="bi bi-gear-fill-nav-menu" aria-hidden="true"></span> Panel admin
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="admin/categorias">
-                    <span class="bi bi-folder-fill-nav-menu" aria-hidden="true"></span> Categorías
-                </NavLink>
-            </div>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="perfil">
-                    <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Mi perfil
-                </NavLink>
-            </div>
-        }
-    </nav>
-</div>
+</header>
 
 @code {
-    private bool collapseNavMenu = true;
     private bool esAdmin;
-    private bool yaVerificado;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    private bool menuAbierto;
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,7 +69,14 @@
         {
             esAdmin = false;
         }
-        yaVerificado = true;
+    }
+
+    private void ToggleMenu() => menuAbierto = !menuAbierto;
+
+    private async Task CerrarSesion()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/");
     }
 
     public void Dispose()
