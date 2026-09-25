@@ -1,0 +1,145 @@
+@page "/producto/{Id:int}"
+@using PerfumeCatalog.Client.Models
+@using PerfumeCatalog.Client.Services
+@inject ProductoService ProductoService
+@inject CategoriaService CategoriaService
+@inject NavigationManager Nav
+@inject IJSRuntime JS
+
+<PageTitle>@(producto?.Nombre ?? "Producto") — Boutique Norma</PageTitle>
+
+<div class="detalle-page">
+
+@if (cargando)
+{
+    <p>Cargando producto...</p>
+}
+else if (producto is null)
+{
+    <div class="sin-resultados">
+        <p>😕 No encontramos este producto.</p>
+        <button class="btn-cancelar" @onclick="Volver">Volver a productos</button>
+    </div>
+}
+else
+{
+    <button class="btn-volver" @onclick="Volver">← Volver</button>
+
+    <div class="detalle-grid">
+        <div class="detalle-imagen">
+            @if (!string.IsNullOrEmpty(producto.ImagenUrl))
+            {
+                <img src="@producto.ImagenUrl" alt="@producto.Nombre" />
+            }
+            else
+            {
+                <div class="sin-imagen">Sin imagen</div>
+            }
+        </div>
+
+        <div class="detalle-info">
+            <span class="categoria-badge">
+                @if (categoria is not null)
+                {
+                    @($"{categoria.Emoji} {categoria.Nombre}")
+                }
+                else
+                {
+                    @producto.Categoria
+                }
+            </span>
+
+            <h1>@producto.Nombre</h1>
+
+            <p class="detalle-precio">Gs. @producto.Precio.ToString("N0")</p>
+
+            <p class="detalle-descripcion">@producto.Descripcion</p>
+
+            <div class="detalle-acciones">
+                <button class="btn-whatsapp-grande" @onclick="CompartirWhatsApp">
+                    📱 Consultar por WhatsApp
+                </button>
+                <button class="btn-pdf-detalle" @onclick="DescargarPDF">
+                    📄 Descargar PDF
+                </button>
+                <button class="btn-compartir-detalle" @onclick="CompartirNativo">
+                    🔗 Compartir enlace
+                </button>
+            </div>
+
+            @if (!producto.Disponible)
+            {
+                <div class="no-disponible">⚠️ Producto no disponible actualmente</div>
+            }
+        </div>
+    </div>
+}
+
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Producto? producto;
+    private Categoria? categoria;
+    private bool cargando = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        cargando = true;
+        try
+        {
+            var todos = await ProductoService.ObtenerProductosAsync();
+            producto = todos.FirstOrDefault(p => p.Id == Id);
+
+            if (producto?.CategoriaId is not null)
+            {
+                var cats = await CategoriaService.ObtenerTodasAsync();
+                categoria = cats.FirstOrDefault(c => c.Id == producto.CategoriaId);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando producto: {ex.Message}");
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void Volver() => Nav.NavigateTo("/productos");
+
+    private async Task CompartirWhatsApp()
+    {
+        if (producto is null) return;
+        var nombreCat = categoria is not null ? $"{categoria.Emoji} {categoria.Nombre}" : producto.Categoria;
+        var texto = $"🌸 {producto.Nombre}\n" +
+                    $"Categoría: {nombreCat}\n" +
+                    $"{producto.Descripcion}\n" +
+                    $"💵 Precio: Gs. {producto.Precio:N0}\n\n" +
+                    $"¿Te interesa? Escribime 😊";
+        await JS.InvokeVoidAsync("compartirWhatsApp", texto, null);
+    }
+
+    private async Task DescargarPDF()
+    {
+        if (producto is null) return;
+        var datos = new
+        {
+            nombre = producto.Nombre ?? "",
+            descripcion = producto.Descripcion ?? "",
+            precio = (double)producto.Precio,
+            categoria = categoria?.Nombre ?? producto.Categoria ?? ""
+        };
+        await JS.InvokeVoidAsync("generarPDFProducto", (object)datos);
+    }
+
+    private async Task CompartirNativo()
+    {
+        if (producto is null) return;
+        var texto = $"Mirá este producto de Boutique Norma: {producto.Nombre} — Gs. {producto.Precio:N0}";
+        await JS.InvokeVoidAsync("compartirWhatsApp", texto, null);
+    }
+}

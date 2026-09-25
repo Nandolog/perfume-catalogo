@@ -642,3 +642,162 @@ code {
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
 }
+/* Detalle de producto */
+.detalle-page {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.btn-volver {
+    background: transparent;
+    border: none;
+    color: #7c3aed;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+    font-family: inherit;
+}
+
+.btn-volver:hover {
+    text-decoration: underline;
+}
+
+.detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .detalle-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+.detalle-imagen img {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sin-imagen {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f3f4f6;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.detalle-info h1 {
+    font-size: 2rem;
+    margin: 0.5rem 0 1rem;
+    color: #1f2937;
+}
+
+.categoria-badge {
+    display: inline-block;
+    background: #f3e8ff;
+    color: #7c3aed;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.detalle-precio {
+    font-size: 1.8rem;
+    color: #16a34a;
+    font-weight: 700;
+    margin: 1rem 0;
+}
+
+.detalle-descripcion {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+    margin-bottom: 2rem;
+}
+
+.detalle-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-whatsapp-grande,
+.btn-pdf-detalle,
+.btn-compartir-detalle {
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    font-family: inherit;
+}
+
+.btn-whatsapp-grande {
+    background: #25d366;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.btn-whatsapp-grande:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.btn-pdf-detalle {
+    background: #7c3aed;
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.btn-pdf-detalle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+.btn-compartir-detalle {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.btn-compartir-detalle:hover {
+    background: #e5e7eb;
+}
+
+.no-disponible {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #fef3c7;
+    color: #92400e;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+}
+
+/* Links en tarjetas */
+.producto-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.producto-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.producto-acciones-externas {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+}
