@@ -1,81 +1,139 @@
 @page "/productos"
 @using PerfumeCatalog.Client.Models
 @using PerfumeCatalog.Client.Services
-@using Microsoft.AspNetCore.Components
 @inject ProductoService ProductoService
+@inject CategoriaService CategoriaService
 @inject IJSRuntime JS
+@inject NavigationManager Nav
 
-<PageTitle>Productos</PageTitle>
+<PageTitle>Productos — Boutique Norma</PageTitle>
 
-<div class="header-catalogo">
-    <h1>🛍️ Productos</h1>
-    @if (productos.Count > 0)
+<div class="productos-page">
+
+    <div class="header-catalogo">
+        <h1>🛍️ Productos</h1>
+        @if (productosFiltrados.Count > 0)
+        {
+            <div class="header-acciones">
+                <button class="btn-whatsapp-header" @onclick="CompartirCatalogoWhatsApp">
+                    📱 Compartir
+                </button>
+                <button class="btn-pdf" @onclick="DescargarCatalogoPDF">
+                    📄 PDF completo
+                </button>
+            </div>
+        }
+    </div>
+
+    <!-- Buscador -->
+    <div class="buscador-container">
+        <input type="text"
+               class="buscador"
+               placeholder="🔍 Buscar producto..."
+               @bind="textoBusqueda"
+               @bind:event="oninput" />
+    </div>
+
+    <!-- Chips de categorías -->
+    <div class="categorias-chips">
+        <button class="chip @(categoriaSeleccionada is null ? "chip-activo" : "")"
+                @onclick="() => SeleccionarCategoria(null)">
+            Todos (@productos.Count)
+        </button>
+        @foreach (var cat in categorias)
+        {
+            var cantidad = productos.Count(p => p.CategoriaId == cat.Id);
+            <button class="chip @(categoriaSeleccionada == cat.Id ? "chip-activo" : "")"
+                    @onclick="() => SeleccionarCategoria(cat.Id)">
+                @cat.Emoji @cat.Nombre (@cantidad)
+            </button>
+        }
+    </div>
+
+    <!-- Lista de productos -->
+    @if (cargando)
     {
-        <div class="header-acciones">
-            <button class="btn-whatsapp-header" @onclick="CompartirCatalogoWhatsApp">
-                📱 Compartir
-            </button>
-            <button class="btn-pdf" @onclick="DescargarCatalogoPDF">
-                📄 PDF completo
-            </button>
+        <p>Cargando productos...</p>
+    }
+    else if (!string.IsNullOrEmpty(error))
+    {
+        <div class="error-box">
+            <strong>Error:</strong> @error
+        </div>
+    }
+    else if (productosFiltrados.Count == 0)
+    {
+        <div class="sin-resultados">
+            <p>😕 No se encontraron productos con esos filtros.</p>
+            @if (!string.IsNullOrEmpty(textoBusqueda) || categoriaSeleccionada is not null)
+            {
+                <button class="btn-cancelar" @onclick="LimpiarFiltros">
+                    Limpiar filtros
+                </button>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="resultado-count">
+            Mostrando @productosFiltrados.Count de @productos.Count productos
+        </p>
+
+        <div class="catalogo">
+            @foreach (var p in productosFiltrados)
+            {
+                <div class="producto-card">
+                    @if (!string.IsNullOrEmpty(p.ImagenUrl))
+                    {
+                        <img src="@p.ImagenUrl" alt="@p.Nombre" />
+                    }
+                    <div class="producto-info">
+                        <span class="categoria">
+                            @{
+                                var cat = categorias.FirstOrDefault(c => c.Id == p.CategoriaId);
+                                @(cat is not null ? $"{cat.Emoji} {cat.Nombre}" : p.Categoria)
+                            }
+                        </span>
+                        <h3>@p.Nombre</h3>
+                        <p>@p.Descripcion</p>
+                        <strong class="precio">Gs. @p.Precio.ToString("N0")</strong>
+
+                        <div class="acciones">
+                            <button class="btn-whatsapp" @onclick="() => CompartirWhatsApp(p)">
+                                📱 Compartir
+                            </button>
+                            <button class="btn-pdf-small" @onclick="() => DescargarPDFProducto(p)">
+                                📄 PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>
 
-@if (cargando)
-{
-    <p>Cargando productos...</p>
-}
-else if (!string.IsNullOrEmpty(error))
-{
-    <div class="error-box">
-        <strong>Error:</strong> @error
-    </div>
-}
-else if (productos.Count == 0)
-{
-    <p>No hay productos disponibles.</p>
-}
-else
-{
-    <div class="catalogo">
-        @foreach (var p in productos)
-        {
-            <div class="producto-card">
-                @if (!string.IsNullOrEmpty(p.ImagenUrl))
-                {
-                    <img src="@p.ImagenUrl" alt="@p.Nombre" />
-                }
-                <div class="producto-info">
-                    <span class="categoria">@p.Categoria</span>
-                    <h3>@p.Nombre</h3>
-                    <p>@p.Descripcion</p>
-                    <strong class="precio">Gs. @p.Precio.ToString("N0")</strong>
-
-                    <div class="acciones">
-                        <button class="btn-whatsapp" @onclick="() => CompartirWhatsApp(p)">
-                            📱 Compartir
-                        </button>
-                        <button class="btn-pdf-small" @onclick="() => DescargarPDFProducto(p)">
-                            📄 PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}
-
 @code {
+    [Parameter, SupplyParameterFromQuery(Name = "categoria")]
+    public int? CategoriaFiltroInicial { get; set; }
+
     private List<Producto> productos = new();
+    private List<Categoria> categorias = new();
     private bool cargando = true;
     private string? error;
+
+    private string textoBusqueda = "";
+    private int? categoriaSeleccionada;
+
+    private List<Producto> productosFiltrados => Filtrar(productos);
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             productos = await ProductoService.ObtenerProductosAsync();
+            categorias = await CategoriaService.ObtenerTodasAsync();
+            categoriaSeleccionada = CategoriaFiltroInicial;
         }
         catch (Exception ex)
         {
@@ -87,10 +145,47 @@ else
         }
     }
 
+    private List<Producto> Filtrar(List<Producto> origen)
+    {
+        var query = origen.AsEnumerable();
+
+        if (categoriaSeleccionada is not null)
+        {
+            query = query.Where(p => p.CategoriaId == categoriaSeleccionada);
+        }
+
+        if (!string.IsNullOrWhiteSpace(textoBusqueda))
+        {
+            var busqueda = textoBusqueda.Trim().ToLowerInvariant();
+            query = query.Where(p =>
+                (p.Nombre ?? "").ToLowerInvariant().Contains(busqueda) ||
+                (p.Descripcion ?? "").ToLowerInvariant().Contains(busqueda));
+        }
+
+        return query.ToList();
+    }
+
+    private void SeleccionarCategoria(int? categoriaId)
+    {
+        categoriaSeleccionada = categoriaId;
+        // Actualizamos la URL sin recargar la página
+        var url = categoriaId is null ? "/productos" : $"/productos?categoria={categoriaId}";
+        Nav.NavigateTo(url, replace: true);
+    }
+
+    private void LimpiarFiltros()
+    {
+        textoBusqueda = "";
+        SeleccionarCategoria(null);
+    }
+
     private async Task CompartirWhatsApp(Producto p)
     {
+        var cat = categorias.FirstOrDefault(c => c.Id == p.CategoriaId);
+        var nombreCat = cat is not null ? $"{cat.Emoji} {cat.Nombre}" : p.Categoria;
+
         var texto = $"🌸 {p.Nombre}\n" +
-                    $"Categoría: {p.Categoria}\n" +
+                    $"Categoría: {nombreCat}\n" +
                     $"{p.Descripcion}\n" +
                     $"💵 Precio: Gs. {p.Precio:N0}\n\n" +
                     $"¿Te interesa? Escribime 😊";
@@ -100,10 +195,10 @@ else
     private async Task CompartirCatalogoWhatsApp()
     {
         var lineas = new List<string> { "🌸 *Boutique Norma*", "" };
-        foreach (var p in productos)
+        foreach (var p in productosFiltrados)
         {
             lineas.Add($"*{p.Nombre}*");
-            lineas.Add($"{p.Categoria} — Gs. {p.Precio:N0}");
+            lineas.Add($"Gs. {p.Precio:N0}");
             if (!string.IsNullOrWhiteSpace(p.Descripcion))
                 lineas.Add(p.Descripcion);
             lineas.Add("");
@@ -127,7 +222,7 @@ else
 
     private async Task DescargarCatalogoPDF()
     {
-        var lista = productos.Select(p => new
+        var lista = productosFiltrados.Select(p => new
         {
             nombre = p.Nombre ?? "",
             descripcion = p.Descripcion ?? "",
@@ -136,25 +231,4 @@ else
         }).ToArray();
         await JS.InvokeVoidAsync("generarPDFCatalogo", (object)lista);
     }
-    [Parameter, SupplyParameterFromQuery(Name = "categoria")]
-public int? CategoriaFiltro { get; set; }
-
-protected override async Task OnParametersSetAsync()
-{
-    // Recargar si cambia el filtro
-    if (!cargando) return;
-    
-    var todos = await ProductoService.ObtenerProductosAsync();
-    
-    if (CategoriaFiltro.HasValue)
-    {
-        productos = todos.Where(p => p.CategoriaId == CategoriaFiltro.Value).ToList();
-    }
-    else
-    {
-        productos = todos;
-    }
-    
-    cargando = false;
-}
 }

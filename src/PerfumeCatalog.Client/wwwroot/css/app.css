@@ -562,3 +562,83 @@ code {
     border-color: #7c3aed;
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
+
+.productos-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.buscador-container {
+    margin: 1.5rem 0;
+}
+
+.buscador {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.buscador:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+.categorias-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.chip {
+    background: white;
+    border: 2px solid #e5e7eb;
+    color: #555;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.chip:hover {
+    border-color: #7c3aed;
+    color: #7c3aed;
+}
+
+.chip-activo {
+    background: #7c3aed;
+    border-color: #7c3aed;
+    color: white;
+}
+
+.chip-activo:hover {
+    background: #6d28d9;
+    color: white;
+}
+
+.resultado-count {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.sin-resultados {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.sin-resultados p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
