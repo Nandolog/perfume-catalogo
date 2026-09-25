@@ -132,7 +132,7 @@ else
                             <td>@p.Nombre</td>
                                 <td>@{
                                         var cat = categorias.FirstOrDefault (c => c.Id == p.CategoriaId);
-                                        if (CargarProductos != null)
+                                        if (cat is not null)
                                         {
                                             <span>@cat.Emoji @cat.Nombre</span>
                                         }

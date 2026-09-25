@@ -53,10 +53,15 @@
         Nav.LocationChanged += OnLocationChanged;
     }
 
-    private async void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    private void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
     {
-        await VerificarAuth();
-        StateHasChanged();
+        // No usar async void. Programar con InvokeAsync para asegurarnos
+        // de correr en el Dispatcher de Blazor.
+        _ = InvokeAsync(async () =>
+        {
+            await VerificarAuth();
+            StateHasChanged();
+        });
     }
 
     private async Task VerificarAuth()
