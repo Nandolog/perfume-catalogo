@@ -318,3 +318,229 @@ code {
     font-size: 2.5rem;
     margin-bottom: 1rem;
 }
+
+/* ============================ */
+/* HOME */
+/* ============================ */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    min-height: 420px;
+    background:
+        linear-gradient(135deg, rgba(124, 58, 237, 0.85), rgba(236, 72, 153, 0.75)),
+        url('https://images.unsplash.com/photo-1541643600914-78b084683601?w=1600') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    border-radius: 0 0 24px 24px;
+    margin-bottom: 3rem;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin: 0 0 0.5rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitulo {
+    font-size: 1.25rem;
+    margin: 0 0 2rem;
+    opacity: 0.95;
+}
+
+.btn-hero {
+    background: white;
+    color: #7c3aed;
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-hero:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* SOBRE NOSOTROS */
+.sobre-nosotros {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.sobre-nosotros h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #7c3aed;
+}
+
+.sobre-nosotros p {
+    max-width: 700px;
+    margin: 0 auto 1rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444;
+}
+
+.sobre-firma {
+    font-style: italic;
+    color: #888;
+}
+
+/* CATEGORÍAS */
+.categorias-home {
+    padding: 3rem 0;
+    background: #faf7ff;
+    border-radius: 24px;
+    margin-bottom: 3rem;
+}
+
+.categorias-home h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #7c3aed;
+}
+
+.categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.categoria-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 1rem;
+    background: white;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.categoria-card:hover {
+    border-color: #7c3aed;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+}
+
+.categoria-emoji {
+    font-size: 2.5rem;
+}
+
+.categoria-nombre {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+/* PRODUCTOS DESTACADOS */
+.destacados-home {
+    padding: 2rem 0 3rem;
+}
+
+.destacados-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.destacados-header h2 {
+    font-size: 2rem;
+    color: #7c3aed;
+    margin: 0;
+}
+
+.btn-ver-todos {
+    background: transparent;
+    color: #7c3aed;
+    border: 2px solid #7c3aed;
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-ver-todos:hover {
+    background: #7c3aed;
+    color: white;
+}
+
+/* CONTACTO */
+.contacto-home {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    color: white;
+    border-radius: 24px 24px 0 0;
+    margin-top: 2rem;
+}
+
+.contacto-home h2 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+}
+
+.contacto-home p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.95;
+}
+
+.btn-whatsapp-contacto {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+}
+
+.btn-whatsapp-contacto:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.5);
+}
+
+@media (max-width: 600px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-subtitulo {
+        font-size: 1rem;
+    }
+
+    .sobre-nosotros h2,
+    .categorias-home h2,
+    .destacados-header h2,
+    .contacto-home h2 {
+        font-size: 1.5rem;
+    }
+}

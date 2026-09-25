@@ -1,8 +1,11 @@
 (function () {
-    window.compartirWhatsApp = function (texto) {
-        const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-        window.open(url, '_blank');
-    };
+    window.compartirWhatsApp = function (texto, numero) {
+    const base = (numero && numero.length > 0)
+        ? `https://wa.me/${numero}`
+        : 'https://wa.me/';
+    const url = `${base}?text=${encodeURIComponent(texto)}`;
+    window.open(url, '_blank');
+};
 
     window.generarPDFProducto = function (producto) {
         const { jsPDF } = window.jspdf;

@@ -1,11 +1,11 @@
 {
   "mainAssemblyName": "PerfumeCatalog.Client",
   "resources": {
-    "hash": "sha256-ijwS8R4ZrJ/7oJDs5D3ogx9b6sbX4ioYu5XV4zG4bt0=",
+    "hash": "sha256-5kvzMRS+h8kY6JK9ce8Oaf4WrrO9Mu2FOKSo0jtzJwE=",
     "fingerprinting": {
       "Supabase.Functions.w4gz1z4ill.wasm": "Supabase.Functions.wasm",
       "Supabase.Gotrue.gsal9ee3gm.wasm": "Supabase.Gotrue.wasm",
-      "Microsoft.AspNetCore.Components.p71hmivw21.wasm": "Microsoft.AspNetCore.Components.wasm",
+      "Microsoft.AspNetCore.Components.lpofh3mt6q.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.a7lerytorx.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.s50dvctzuh.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
       "Microsoft.Extensions.Configuration.zb9mbyctfu.wasm": "Microsoft.Extensions.Configuration.wasm",
@@ -54,7 +54,7 @@
       "System.IO.Pipelines.ozf0bs3f96.wasm": "System.IO.Pipelines.wasm",
       "System.Linq.Expressions.473fjoac21.wasm": "System.Linq.Expressions.wasm",
       "System.Linq.Queryable.ht3yk7q0bk.wasm": "System.Linq.Queryable.wasm",
-      "System.Linq.8qzfvi9zku.wasm": "System.Linq.wasm",
+      "System.Linq.a49ftkwjir.wasm": "System.Linq.wasm",
       "System.Memory.78vx2veg11.wasm": "System.Memory.wasm",
       "System.Net.Http.3q9fsmnxeb.wasm": "System.Net.Http.wasm",
       "System.Net.NetworkInformation.5smplhddnz.wasm": "System.Net.NetworkInformation.wasm",
@@ -92,7 +92,7 @@
       "System.t250xnkyfs.wasm": "System.wasm",
       "netstandard.qmlkx623di.wasm": "netstandard.wasm",
       "System.Private.CoreLib.dr3sp2puz4.wasm": "System.Private.CoreLib.wasm",
-      "PerfumeCatalog.Client.9zjegn2ncp.wasm": "PerfumeCatalog.Client.wasm",
+      "PerfumeCatalog.Client.era8s9yk2m.wasm": "PerfumeCatalog.Client.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.xsn1d6x2kd.js": "dotnet.native.js",
       "dotnet.native.vz0adxojrz.wasm": "dotnet.native.wasm",
@@ -122,7 +122,7 @@
     "assembly": {
       "Supabase.Functions.w4gz1z4ill.wasm": "sha256-cAmNEcl3ZkcTAcSFQY9ViicWaBQnCMxJGk7fcpxTwAg=",
       "Supabase.Gotrue.gsal9ee3gm.wasm": "sha256-IJVfKJFlwBXRb7fR+mTHf66WvrXDZnn+xI+7Oohb0uo=",
-      "Microsoft.AspNetCore.Components.p71hmivw21.wasm": "sha256-ZW6A98IBnsx8K7sdeDE2Mh/QVbTwz/XE1QnmshuoqKs=",
+      "Microsoft.AspNetCore.Components.lpofh3mt6q.wasm": "sha256-J5jK/RjRZQW9xXD7EKjO8+k0fOpTLrKHNlpNkMcDtqU=",
       "Microsoft.AspNetCore.Components.Web.a7lerytorx.wasm": "sha256-1vVhDDVok/xxJIZZ8Rc4gTHX0Jap4Q6zkMvUMs1OSvQ=",
       "Microsoft.AspNetCore.Components.WebAssembly.s50dvctzuh.wasm": "sha256-8P6ygZM+c0TB93Et2uHkuW70R+B+3izW73Qu691BFgE=",
       "Microsoft.Extensions.Configuration.zb9mbyctfu.wasm": "sha256-v4tc0Il1TroSigYd3PwXpiCUuGCmAujkKt+jMYmmB+8=",
@@ -171,7 +171,7 @@
       "System.IO.Pipelines.ozf0bs3f96.wasm": "sha256-DOS3631fUKSvbgYYQ0EtoOsoqV7wDE8Xh4FViJerdx8=",
       "System.Linq.Expressions.473fjoac21.wasm": "sha256-8LDY5u5fN2Qc5tuyVLT7HE4etE8rGrFwpp6DOXazPnw=",
       "System.Linq.Queryable.ht3yk7q0bk.wasm": "sha256-1fdVwd+yakppAvecavI+J5NIPmTcnb4J3tub2ColZh8=",
-      "System.Linq.8qzfvi9zku.wasm": "sha256-YEZEsI0Vp2Pf8Ab0Xm6WceU20ppNUHg30ntvMrt/YiA=",
+      "System.Linq.a49ftkwjir.wasm": "sha256-6qh1fZpfYpIZXKexu8c3QICi6qGLHnP5tnaPeSH9Qg0=",
       "System.Memory.78vx2veg11.wasm": "sha256-qeX+Ynzky2Hyu+RlRJZQKCZXPMxdUbmbVfB6mjy/r60=",
       "System.Net.Http.3q9fsmnxeb.wasm": "sha256-Bb2ixJfJo4TyOa/FkPC54PzIo0YzEP/xCb3pGTt6tC0=",
       "System.Net.NetworkInformation.5smplhddnz.wasm": "sha256-lWix88J9k5YYokxui57PFhLDRywsxuzmJ3s7On7JWuU=",
@@ -207,7 +207,7 @@
       "System.Xml.XDocument.m8p67dkr3z.wasm": "sha256-RoDPqGJIyp8Zs4bUBn6ZJZUVTL9sMGCBvDQ/dV//PC8=",
       "System.t250xnkyfs.wasm": "sha256-tVaTeiubnxofQV5rO7ga2UOORIQEtLkQr36ewcMO+tw=",
       "netstandard.qmlkx623di.wasm": "sha256-ftyVgR7YRmv+RzYQzBcriKHYXwlbS130/bmvPNkp5pY=",
-      "PerfumeCatalog.Client.9zjegn2ncp.wasm": "sha256-W/fQ5K2lCc/4yi7WBl9zqhgpyIiOE6aQK6Y5pj+CLBc="
+      "PerfumeCatalog.Client.era8s9yk2m.wasm": "sha256-emiqPO8Pewl4i62bueP773+SAXeWjTYctVtM5CnXY3k="
     }
   },
   "cacheBootResources": true,

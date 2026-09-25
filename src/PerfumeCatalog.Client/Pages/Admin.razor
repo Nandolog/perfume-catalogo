@@ -1,10 +1,12 @@
 @page "/admin"
+@using Microsoft.IdentityModel.Tokens
 @using PerfumeCatalog.Client.Models
 @using PerfumeCatalog.Client.Services
 @inject AuthService Auth
 @inject ProductoService ProductoService
 @inject NavigationManager Nav
 @inject IJSRuntime JS
+@inject CategoriaService CategoriaService
 
 <PageTitle>Administración</PageTitle>
 
@@ -45,10 +47,17 @@ else
                 <input @bind="form.Nombre" placeholder="Ej: Sauvage Elixir" />
             </div>
             <div class="form-group">
-                <label>Categoría</label>
-                <input @bind="form.Categoria" placeholder="Masculino / Femenino / Unisex" />
+                <label>Categoria</label>
+                <select @bind="CategoriaSeleccionada">
+                    <option value="">-- Elegir categoria</option>
+                    @foreach (var cat in categorias)
+                        {
+                            <option value="@cat.Id">@cat.Emoji @cat.Nombre</option>
+                        }
+                    </select>
             </div>
-        </div>
+            </div>
+
 
         <div class="form-group">
             <label>Descripción</label>
@@ -121,7 +130,18 @@ else
                                 }
                             </td>
                             <td>@p.Nombre</td>
-                            <td>@p.Categoria</td>
+                                <td>@{
+                                        var cat = categorias.FirstOrDefault (c => c.Id == p.CategoriaId);
+                                        if (CargarProductos != null)
+                                        {
+                                            <span>@cat.Emoji @cat.Nombre</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@p.Categoria</span>
+                                        }
+                                    }
+                            </td>
                             <td>Gs. @p.Precio.ToString("N0")</td>
                             <td>@(p.Disponible ? "✅" : "❌")</td>
                             <td class="acciones-tabla">
@@ -139,6 +159,10 @@ else
 </div>
 
 @code {
+
+    private List<Categoria> categorias = new ();
+
+    private string CategoriaSeleccionada {get; set;} = "";    
     private bool verificando = true;
     private bool autenticado;
     private string? email;
@@ -150,20 +174,21 @@ else
     private string? mensaje;
 
     protected override async Task OnInitializedAsync()
-{
-    autenticado = await Auth.EstaAutenticadoAsync();
-    if (autenticado)
     {
-        email = await Auth.EmailActualAsync();
-        await CargarProductos();
+        autenticado = await Auth.EstaAutenticadoAsync();
+        if (autenticado)
+        {
+            email = await Auth.EmailActualAsync();
+            categorias = await CategoriaService.ObtenerTodasAdminAsync();
+            await CargarProductos();
+        }
+
+        else
+        {
+            Nav.NavigateTo("/login");
+        }
         verificando = false;
     }
-    
-    else
-    {
-        Nav.NavigateTo("/login");
-    }
-}
 
     private void IrALogin() => Nav.NavigateTo("/login");
 
@@ -198,6 +223,7 @@ else
             Categoria = p.Categoria,
             Disponible = p.Disponible
         };
+        CategoriaSeleccionada = p.CategoriaId?.ToString() ?? "";
         mensaje = null;
     }
 
@@ -205,6 +231,7 @@ else
     {
         editando = null;
         form = new Producto();
+        CategoriaSeleccionada =  "";
         mensaje = null;
         _ = JS.InvokeVoidAsync("limpiarInputArchivo", "inputImagen");
     }
@@ -235,6 +262,20 @@ else
                 form.ImagenUrl = await ProductoService.SubirImagenAsync(bytes, resultado.Nombre);
             }
 
+            if (int.TryParse(CategoriaSeleccionada, out int catId))
+            {
+                form.CategoriaId = catId;
+                var cat = categorias.FirstOrDefault(c => c.Id == catId );
+                if (cat != null)
+                {
+                    form.Categoria = cat.Nombre;
+                }
+            }
+            else
+            {
+                form.CategoriaId = null;
+            }
+
             if (editando is null)
             {
                 await ProductoService.CrearAsync(form);
@@ -248,6 +289,7 @@ else
 
             form = new Producto();
             editando = null;
+            CategoriaSeleccionada = "" ;
             await JS.InvokeVoidAsync("limpiarInputArchivo", "inputImagen");
             await CargarProductos();
         }
@@ -283,4 +325,5 @@ else
     }
 
     private void IrAPerfil() => Nav.NavigateTo("/perfil");
+
 }
