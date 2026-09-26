@@ -1375,3 +1375,110 @@ a:hover {
         font-size: 1.75rem;
     }
 }
+
+/* ============================================================
+   SKELETON LOADERS
+   ============================================================ */
+   .skeleton-catalogo {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.75rem;
+    padding: 1rem 0;
+   }
+
+   .skeleton-card {
+    background:  var(--surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+   }
+
+   .skeleton-img {
+    width: 100% ;
+    height: 260px;
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #e0e0e0 50%,
+        #f0f0f0 100%    
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+   }
+   
+   .skeleton-info{
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+   }
+   .skeleton-line {
+    height: 14px;
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 0%,
+        #e0e0e0 50%,
+        #f0f0f0 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.skeleton-line.corta {
+    width: 40%;
+}
+
+.skeleton-line.media {
+    width: 70%;
+}
+
+.skeleton-line.larga {
+    width: 90%;
+}
+
+.skeleton-line.precio {
+    height: 20px;
+    width: 50%;
+    margin-top: 0.5rem;
+}
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ============================================================
+   ANIMACIONES DE ENTRADA (fade-in al scroll)
+   ============================================================ */
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efecto cascada: cada tarjeta aparece un poco después */
+.fade-in:nth-child(1) { transition-delay: 0.05s; }
+.fade-in:nth-child(2) { transition-delay: 0.1s; }
+.fade-in:nth-child(3) { transition-delay: 0.15s; }
+.fade-in:nth-child(4) { transition-delay: 0.2s; }
+.fade-in:nth-child(5) { transition-delay: 0.25s; }
+.fade-in:nth-child(6) { transition-delay: 0.3s; }
+
+/* Accesibilidad: respetar preferencias del usuario */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

@@ -1,11 +1,11 @@
 {
   "mainAssemblyName": "PerfumeCatalog.Client",
   "resources": {
-    "hash": "sha256-JWZpK576mXZ1raGP8DIDEB9sU32F8uWC0O5phWkNz50=",
+    "hash": "sha256-EmQYpVC19ra5tw2tIjcWuNBJpP+a8F9cbNWOUCi9ZRE=",
     "fingerprinting": {
       "Supabase.Functions.w4gz1z4ill.wasm": "Supabase.Functions.wasm",
       "Supabase.Gotrue.gsal9ee3gm.wasm": "Supabase.Gotrue.wasm",
-      "Microsoft.AspNetCore.Components.lpofh3mt6q.wasm": "Microsoft.AspNetCore.Components.wasm",
+      "Microsoft.AspNetCore.Components.do1coroang.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Web.a7lerytorx.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.s50dvctzuh.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
       "Microsoft.Extensions.Configuration.zb9mbyctfu.wasm": "Microsoft.Extensions.Configuration.wasm",
@@ -92,7 +92,7 @@
       "System.t250xnkyfs.wasm": "System.wasm",
       "netstandard.qmlkx623di.wasm": "netstandard.wasm",
       "System.Private.CoreLib.dr3sp2puz4.wasm": "System.Private.CoreLib.wasm",
-      "PerfumeCatalog.Client.2xv18uk8n5.wasm": "PerfumeCatalog.Client.wasm",
+      "PerfumeCatalog.Client.1f1dpgpiu8.wasm": "PerfumeCatalog.Client.wasm",
       "dotnet.js": "dotnet.js",
       "dotnet.native.xsn1d6x2kd.js": "dotnet.native.js",
       "dotnet.native.vz0adxojrz.wasm": "dotnet.native.wasm",
@@ -122,7 +122,7 @@
     "assembly": {
       "Supabase.Functions.w4gz1z4ill.wasm": "sha256-cAmNEcl3ZkcTAcSFQY9ViicWaBQnCMxJGk7fcpxTwAg=",
       "Supabase.Gotrue.gsal9ee3gm.wasm": "sha256-IJVfKJFlwBXRb7fR+mTHf66WvrXDZnn+xI+7Oohb0uo=",
-      "Microsoft.AspNetCore.Components.lpofh3mt6q.wasm": "sha256-J5jK/RjRZQW9xXD7EKjO8+k0fOpTLrKHNlpNkMcDtqU=",
+      "Microsoft.AspNetCore.Components.do1coroang.wasm": "sha256-gwhyRz5o5VDaeVleUrct06IzZgN1hHLi3A73M+C3da4=",
       "Microsoft.AspNetCore.Components.Web.a7lerytorx.wasm": "sha256-1vVhDDVok/xxJIZZ8Rc4gTHX0Jap4Q6zkMvUMs1OSvQ=",
       "Microsoft.AspNetCore.Components.WebAssembly.s50dvctzuh.wasm": "sha256-8P6ygZM+c0TB93Et2uHkuW70R+B+3izW73Qu691BFgE=",
       "Microsoft.Extensions.Configuration.zb9mbyctfu.wasm": "sha256-v4tc0Il1TroSigYd3PwXpiCUuGCmAujkKt+jMYmmB+8=",
@@ -207,7 +207,7 @@
       "System.Xml.XDocument.m8p67dkr3z.wasm": "sha256-RoDPqGJIyp8Zs4bUBn6ZJZUVTL9sMGCBvDQ/dV//PC8=",
       "System.t250xnkyfs.wasm": "sha256-tVaTeiubnxofQV5rO7ga2UOORIQEtLkQr36ewcMO+tw=",
       "netstandard.qmlkx623di.wasm": "sha256-ftyVgR7YRmv+RzYQzBcriKHYXwlbS130/bmvPNkp5pY=",
-      "PerfumeCatalog.Client.2xv18uk8n5.wasm": "sha256-1tcngGJaYtMfoS8HzQDY7Tj8DpxGXEbQjZSc+HyLXcc="
+      "PerfumeCatalog.Client.1f1dpgpiu8.wasm": "sha256-bVH7sNatsI98VosUrf3TLqtV4SSUAJmXent1Y+RE5Mg="
     }
   },
   "cacheBootResources": true,

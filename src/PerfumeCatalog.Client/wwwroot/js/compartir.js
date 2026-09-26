@@ -138,4 +138,20 @@
 
         elementos.forEach(el => observer.observe(el));
     };
+        // Escuchar el scroll y notificar al componente Blazor
+    window.registrarScrollListener = function (dotNetRef) {
+        let ticking = false;
+
+        const handler = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    dotNetRef.invokeMethodAsync('OnScroll', window.scrollY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', handler, { passive: true });
+    };
 })();

@@ -118,4 +118,24 @@
             window.localStorage.removeItem(key);
         }
     };
+
+        // Animaciones al scroll con IntersectionObserver
+    window.activarAnimacionesScroll = function () {
+        const elementos = document.querySelectorAll('.fade-in:not(.visible)');
+        if (elementos.length === 0) return;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        elementos.forEach(el => observer.observe(el));
+    };
 })();

@@ -1,9 +1,18 @@
-﻿@inherits LayoutComponentBase
+﻿@using PerfumeCatalog.Client.Services
+@inject TemaService TemaService
+@inherits LayoutComponentBase
 
 <div class="main-layout">
     <NavMenu />
-
     <main class="main-content">
         @Body
     </main>
+    <BotonVolverArriba />
 </div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await TemaService.InicializarAsync();
+    }
+}

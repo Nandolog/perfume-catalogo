@@ -1,0 +1,45 @@
+@inject IJSRuntime JS
+@implements IDisposable
+
+@if (visible)
+{
+    <button class="btn-volver-arriba" @onclick="SubirArriba" title="Volver arriba">
+        ↑
+    </button>
+}
+
+@code {
+    private bool visible;
+    private DotNetObjectReference<BotonVolverArriba>? _objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("registrarScrollListener", _objRef);
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnScroll(int scrollY)
+    {
+        var nuevoVisible = scrollY > 400;
+
+        if (nuevoVisible != visible)
+        {
+            visible = nuevoVisible;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SubirArriba()
+    {
+        await JS.InvokeVoidAsync("window.scrollTo", new { top = 0, behavior = "smooth" });
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}

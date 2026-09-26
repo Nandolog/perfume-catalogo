@@ -12,5 +12,6 @@ builder.Services.AddScoped<SupabaseProvider>();
 builder.Services.AddScoped<ProductoService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TemaService>();
 
 await builder.Build().RunAsync();
