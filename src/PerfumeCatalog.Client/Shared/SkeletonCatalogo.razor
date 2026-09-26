@@ -1,0 +1,13 @@
+@* Skeleton loader para catálogos - muestra N tarjetas animadas *@
+
+<div class="skeleton-catalogo">
+    @for (int i = 0; i < Cantidad; i++)
+    {
+        <SkeletonCard />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Cantidad { get; set; } = 6;
+}

@@ -1,0 +1,214 @@
+@page "/admin/categorias"
+@using PerfumeCatalog.Client.Models
+@using PerfumeCatalog.Client.Services
+@inject AuthService Auth
+@inject CategoriaService CategoriaService
+@inject NavigationManager Nav
+
+<PageTitle>Categorías — Boutique Norma</PageTitle>
+
+<div class="admin-page">
+
+@if (verificando)
+{
+    <p>Verificando sesión...</p>
+}
+else if (!autenticado)
+{
+    <p>Redirigiendo al login...</p>
+}
+else
+{
+    <div class="admin-header">
+        <h1>📂 Categorías</h1>
+        <div class="admin-user">
+            <button class="btn-pdf-small" @onclick="VolverAlPanel">← Volver al panel</button>
+        </div>
+    </div>
+
+    <div class="admin-form">
+        <h2>@(editando is null ? "➕ Nueva categoría" : $"✏️ Editando: {editando.Nombre}")</h2>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="mensaje-box">@mensaje</div>
+        }
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input @bind="form.Nombre" placeholder="Ej: Perfumes" />
+            </div>
+            <div class="form-group">
+                <label>Emoji</label>
+                <input @bind="form.Emoji" placeholder="🌸" maxlength="4" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Orden (menor = primero)</label>
+            <input type="number" @bind="form.Orden" placeholder="1" />
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-primario" @onclick="Guardar" disabled="@guardando">
+                @(guardando ? "Guardando..." : (editando is null ? "Crear categoría" : "Guardar cambios"))
+            </button>
+            @if (editando is not null)
+            {
+                <button class="btn-cancelar" @onclick="CancelarEdicion">Cancelar</button>
+            }
+        </div>
+    </div>
+
+    <div class="admin-lista">
+        <h2>📋 Categorías (@categorias.Count)</h2>
+
+        @if (categorias.Count == 0)
+        {
+            <p>No hay categorías todavía.</p>
+        }
+        else
+        {
+            <table class="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Emoji</th>
+                        <th>Nombre</th>
+                        <th>Orden</th>
+                        <th>Activa</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in categorias)
+                    {
+                        <tr>
+                            <td style="font-size:1.5rem;">@c.Emoji</td>
+                            <td>@c.Nombre</td>
+                            <td>@c.Orden</td>
+                            <td>@(c.Activa ? "✅" : "❌")</td>
+                            <td class="acciones-tabla">
+                                <button class="btn-editar" @onclick="() => Editar(c)">✏️</button>
+                                <button class="btn-borrar" @onclick="() => Borrar(c)">🗑️</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+}
+
+</div>
+
+@code {
+    private bool verificando = true;
+    private bool autenticado;
+
+    private List<Categoria> categorias = new();
+    private Categoria form = new();
+    private Categoria? editando;
+    private bool guardando;
+    private string? mensaje;
+
+    protected override async Task OnInitializedAsync()
+    {
+        autenticado = await Auth.EstaAutenticadoAsync();
+        if (autenticado)
+        {
+            await CargarCategorias();
+        }
+        else
+        {
+            Nav.NavigateTo("/login");
+        }
+        verificando = false;
+    }
+
+    private async Task CargarCategorias()
+    {
+        try
+        {
+            categorias = await CategoriaService.ObtenerTodasAdminAsync();
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"Error al cargar: {ex.Message}";
+        }
+    }
+
+    private void Editar(Categoria c)
+    {
+        editando = c;
+        form = new Categoria
+        {
+            Id = c.Id,
+            Nombre = c.Nombre,
+            Emoji = c.Emoji,
+            Orden = c.Orden,
+            Activa = c.Activa
+        };
+        mensaje = null;
+    }
+
+    private void CancelarEdicion()
+    {
+        editando = null;
+        form = new Categoria();
+        mensaje = null;
+    }
+
+    private async Task Guardar()
+    {
+        if (string.IsNullOrWhiteSpace(form.Nombre))
+        {
+            mensaje = "El nombre es obligatorio.";
+            return;
+        }
+
+        guardando = true;
+        mensaje = null;
+
+        try
+        {
+            if (editando is null)
+            {
+                await CategoriaService.CrearAsync(form);
+                mensaje = "✅ Categoría creada.";
+            }
+            else
+            {
+                await CategoriaService.ActualizarAsync(form);
+                mensaje = "✅ Categoría actualizada.";
+            }
+
+            form = new Categoria();
+            editando = null;
+            await CargarCategorias();
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"❌ Error: {ex.Message}";
+        }
+        finally
+        {
+            guardando = false;
+        }
+    }
+
+    private async Task Borrar(Categoria c)
+    {
+        try
+        {
+            await CategoriaService.BorrarAsync(c.Id);
+            mensaje = "🗑️ Categoría eliminada.";
+            await CargarCategorias();
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"❌ Error: {ex.Message}";
+        }
+    }
+    private void VolverAlPanel() => Nav.NavigateTo("/admin");
+}

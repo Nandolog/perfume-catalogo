@@ -54,7 +54,7 @@
     <!-- Lista de productos -->
     @if (cargando)
     {
-        <p>Cargando productos...</p>
+        <SkeletonCatalogo Cantidad="6" />
     }
     else if (!string.IsNullOrEmpty(error))
     {
@@ -83,7 +83,7 @@
         <div class="catalogo">
             @foreach (var p in productosFiltrados)
             {
-               <div class="producto-card">
+               <div class="producto-card fade-in">
     <a href="/producto/@p.Id" class="producto-link">
         @if (!string.IsNullOrEmpty(p.ImagenUrl))
         {
@@ -234,4 +234,12 @@
         }).ToArray();
         await JS.InvokeVoidAsync("generarPDFCatalogo", (object)lista);
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    if (!cargando)
+    {
+        await JS.InvokeVoidAsync("activarAnimacionesScroll");
+    }
+}
 }

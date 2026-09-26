@@ -56,18 +56,24 @@
 @if (productosDestacados.Count > 0)
 {
     <section class="destacados-home">
-        <div class="container">
-            <div class="destacados-header">
-                <h2>Productos destacados</h2>
-                <button class="btn-ver-todos" @onclick="IrAProductos">
-                    Ver todos →
-                </button>
-            </div>
+    <div class="container">
+        <div class="destacados-header">
+            <h2>Productos destacados</h2>
+            <button class="btn-ver-todos" @onclick="IrAProductos">
+                Ver todos →
+            </button>
+        </div>
 
+        @if (cargando)
+        {
+            <SkeletonCatalogo Cantidad="6" />
+        }
+        else if (productosDestacados.Count > 0)
+        {
             <div class="catalogo">
                 @foreach (var p in productosDestacados)
                 {
-                    <div class="producto-card">
+                    <div class="producto-card fade-in">
                         <a href="/producto/@p.Id" class="producto-link">
                             @if (!string.IsNullOrEmpty(p.ImagenUrl))
                             {
@@ -87,8 +93,9 @@
                     </div>
                 }
             </div>
-        </div>
-    </section>
+        }
+    </div>
+</section>
 }
 
 <!-- CONTACTO -->
@@ -160,4 +167,12 @@
         };
         await JS.InvokeVoidAsync("generarPDFProducto", (object)datos);
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    if (!cargando)
+    {
+        await JS.InvokeVoidAsync("activarAnimacionesScroll");
+    }
+}
 }

@@ -25,7 +25,7 @@ else
 {
     <button class="btn-volver" @onclick="Volver">← Volver</button>
 
-    <div class="detalle-grid">
+    <div class="detalle-grid fade-in">
         <div class="detalle-imagen">
             @if (!string.IsNullOrEmpty(producto.ImagenUrl))
             {
@@ -142,5 +142,12 @@ else
         if (producto is null) return;
         var texto = $"Mirá este producto de Boutique Norma: {producto.Nombre} — Gs. {producto.Precio:N0}";
         await JS.InvokeVoidAsync("compartirWhatsApp", texto, null);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!cargando)
+        {
+        await JS.InvokeVoidAsync("activarAnimacionesScroll");
+        }
     }
 }
