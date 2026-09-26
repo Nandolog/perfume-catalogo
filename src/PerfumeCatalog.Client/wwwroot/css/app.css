@@ -1620,3 +1620,23 @@ body, .navbar-moderna, .producto-card, .admin-form, .admin-lista {
         transform: translateY(0);
     }
 }
+
+.btn-instalar-pwa {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.btn-instalar-pwa:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: white;
+}

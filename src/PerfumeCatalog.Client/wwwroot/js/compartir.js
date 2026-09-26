@@ -154,4 +154,30 @@
 
         window.addEventListener('scroll', handler, { passive: true });
     };
+        // PWA: manejar evento de instalación
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        window.dispatchEvent(new CustomEvent('pwa-instalable'));
+    });
+
+    window.puedeInstalarPWA = function () {
+        return deferredPrompt !== null;
+    };
+
+    window.instalarPWA = async function () {
+        if (!deferredPrompt) return false;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        return outcome === 'accepted';
+    };
+
+    window.configurarPWAListener = function (dotNetRef) {
+        window.addEventListener('pwa-instalable', () => {
+            dotNetRef.invokeMethodAsync('OnPWAInstalable');
+        });
+    };
 })();

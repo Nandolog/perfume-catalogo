@@ -1,0 +1,45 @@
+@inject IJSRuntime JS
+@implements IDisposable
+
+@if (mostrar)
+{
+    <button class="btn-instalar-pwa" @onclick="Instalar">
+        📲 Instalar app
+    </button>
+}
+
+@code {
+    private bool mostrar;
+    private DotNetObjectReference<BotonInstalarPWA>? _objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _objRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("configurarPWAListener", _objRef);
+        }
+    }
+
+    [JSInvokable]
+    public void OnPWAInstalable()
+    {
+        mostrar = true;
+        StateHasChanged();
+    }
+
+    private async Task Instalar()
+    {
+        var instalado = await JS.InvokeAsync<bool>("instalarPWA");
+        if (instalado)
+        {
+            mostrar = false;
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}
