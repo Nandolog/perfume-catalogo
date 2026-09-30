@@ -1,8 +1,10 @@
 {
+    "id": "/",
     "name": "Boutique Norma — Perfumes, moda y accesorios",
     "short_name": "Boutique Norma",
     "description": "Catálogo de perfumes, ropa y accesorios de Boutique Norma",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#fdf2f8",
@@ -14,13 +16,35 @@
             "src": "icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         },
         {
             "src": "icon-512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "preview.jpg",
+            "sizes": "1200x630",
+            "type": "image/jpeg",
+            "form_factor": "wide",
+            "label": "Vista de escritorio"
+        },
+        {
+            "src": "preview.jpg",
+            "sizes": "1200x630",
+            "type": "image/jpeg",
+            "form_factor": "narrow",
+            "label": "Vista móvil"
         }
     ]
 }
