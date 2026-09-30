@@ -51,7 +51,14 @@ else
 
             <h1>@producto.Nombre</h1>
 
-            <p class="detalle-precio">Gs. @producto.Precio.ToString("N0")</p>
+            <div class="detalle-precio-container">
+    @if (producto.PrecioAnterior.HasValue && producto.PrecioAnterior > producto.Precio)
+    {
+        <span class="detalle-precio-anterior">Gs. @producto.PrecioAnterior.Value.ToString("N0")</span>
+        <span class="badge-oferta-grande">OFERTA</span>
+    }
+    <p class="detalle-precio">Gs. @producto.Precio.ToString("N0")</p>
+</div>
 
             <p class="detalle-descripcion">@producto.Descripcion</p>
 

@@ -28,4 +28,6 @@ public class Producto : BaseModel
     public bool Disponible { get; set; } = true;
     [Column("categoria_id")]
     public int? CategoriaId { get; set; }
+    [Column("precio_anterior")]
+    public decimal? PrecioAnterior { get; set; }
 }

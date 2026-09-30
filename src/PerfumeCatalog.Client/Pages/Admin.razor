@@ -66,15 +66,22 @@ else
         </div>
 
         <div class="form-row">
-            <div class="form-group">
-                <label>Precio (Gs.)</label>
-                <input type="number" @bind="form.Precio" placeholder="450000" />
-            </div>
-            <div class="form-group">
-                <label>Disponible</label>
-                <input type="checkbox" @bind="form.Disponible" style="width:auto; margin-top:0.5rem;" />
-            </div>
-        </div>
+    <div class="form-group">
+        <label>Precio actual (Gs.)</label>
+        <input type="number" @bind="form.Precio" placeholder="450000" />
+    </div>
+    <div class="form-group">
+        <label>Precio anterior (opcional, si está en oferta)</label>
+        <input type="number" @bind="form.PrecioAnterior" placeholder="Ej: 550000" />
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Disponible</label>
+        <input type="checkbox" @bind="form.Disponible" style="width:auto; margin-top:0.5rem;" />
+    </div>
+</div>
 
         <div class="form-group">
             <label>Imagen</label>
@@ -142,7 +149,15 @@ else
                                         }
                                     }
                             </td>
-                            <td>Gs. @p.Precio.ToString("N0")</td>
+                            <td>
+    @if (p.PrecioAnterior.HasValue && p.PrecioAnterior > p.Precio)
+    {
+        <div style="text-decoration: line-through; color: #999; font-size: 0.85rem;">
+            Gs. @p.PrecioAnterior.Value.ToString("N0")
+        </div>
+    }
+    <strong style="color: #16a34a;">Gs. @p.Precio.ToString("N0")</strong>
+</td>
                             <td>@(p.Disponible ? "✅" : "❌")</td>
                             <td class="acciones-tabla">
                                 <button class="btn-editar" @onclick="() => Editar(p)">✏️</button>
@@ -219,6 +234,7 @@ else
             Nombre = p.Nombre,
             Descripcion = p.Descripcion,
             Precio = p.Precio,
+            PrecioAnterior = p.PrecioAnterior, 
             ImagenUrl = p.ImagenUrl,
             Categoria = p.Categoria,
             Disponible = p.Disponible

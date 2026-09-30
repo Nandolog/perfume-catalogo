@@ -1640,3 +1640,84 @@ body, .navbar-moderna, .producto-card, .admin-form, .admin-lista {
     box-shadow: var(--shadow-lg);
     color: white;
 }
+
+/* ============================================================
+   PRECIOS CON OFERTA
+   ============================================================ */
+
+.precio-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.precio-anterior {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.badge-oferta {
+    display: inline-block;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    animation: pulse-oferta 2s infinite;
+}
+
+@keyframes pulse-oferta {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Detalle de producto */
+.detalle-precio-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+.detalle-precio-anterior {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.badge-oferta-grande {
+    display: inline-block;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    animation: pulse-oferta 2s infinite;
+}
+
+.detalle-precio {
+    font-size: 2.25rem;
+    color: var(--success);
+    font-weight: 700;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
